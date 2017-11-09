@@ -1,4 +1,21 @@
 window.onload = function() {
+	window.oncontextmenu = inhabilitar;
+
+	function inhabilitar(){
+		return false;
+	}
+
+	var colores = new Array("green", "blue", "red", "gray", "yellow", "black");
+
+	function aleatorio(){
+		var numero = Math.floor(Math.random()*10);
+		if(numero < colores.length){
+			return numero;
+		}else{
+			aleatorio();
+		}
+	}
+
 
 	function calcularXY(x, y){   //Prototipo para el calculo de coordenadas
 		this.x = x;
@@ -17,6 +34,7 @@ window.onload = function() {
 		newCirculo.classList.add("circulo");
 		var coordenadas = new calcularXY(event.pageX, event.pageY);
 		newCirculo.style.transform = "translate(" + coordenadas.coorX() + "px, " + coordenadas.coorY() + "px" + ")"; //desplazando nuevo circulo
+		newCirculo.style.backgroundColor = colores[aleatorio()];
 
 		function clickCirculo(e){
 			if(newCirculo.innerHTML == ""){		//controlando error de doble click; si el circulo ya tiene contenido es porque ya se ejutó el evento  
@@ -38,7 +56,18 @@ window.onload = function() {
 			e.stopPropagation();
 		}
 
+		
+		function rightClickCirculo(e){
+			var menu = document.getElementsByClassName("contextMenu")[0];
+			menu.style.display = "block";
+			menu.style.transform = "translate(" + e.pageX + "px, " + e.pageY + "px" + ")";
+			e.stopPropagation();
+			e.preventDefault();
+		}
+
 		newCirculo.addEventListener("click", clickCirculo);
+		newCirculo.addEventListener("contextmenu", rightClickCirculo);
+
 		this.appendChild(newCirculo);
 	}
 
