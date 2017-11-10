@@ -31,3 +31,18 @@ html, body{
 	box-shadow: 1px 1px 5px black;
 	z-index: 9000;
 }
+
+.linkContextMenu{
+	display: block;
+	text-decoration: none;
+	text-align: left;
+	font-family: verdana;
+	font-size: 14px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.linkContextMenu:hover{
+	background: #6F6D6D;
+	color: white;
+}

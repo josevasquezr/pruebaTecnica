@@ -1,9 +1,112 @@
 window.onload = function() {
-	window.oncontextmenu = inhabilitar;
+	window.addEventListener("contextmenu", rightClickBody);
 
-	function inhabilitar(){
-		return false;
+	function rightClickBody(e){
+		if(body.children.length > 2){
+			var menu = document.getElementsByClassName("contextMenu")[0];
+			menu.style.display = "block";
+			menu.style.transform = "translate(" + e.pageX + "px, " + e.pageY + "px" + ")";
+			cambiarContextMenu();
+		}
+		e.stopPropagation();
+		e.preventDefault();
 	}
+
+	function cambiarContextMenu(tipo = 0, newCirculo = new Object()){ //si el tipo es 0 = body, 1 = circulo
+		var menu = document.getElementsByClassName("contextMenu")[0];
+		menu.innerHTML = "";
+		var enlaceGravedad;
+		var enlaceEliminar;
+		if(tipo == 0){
+			enlaceEliminar = document.createElement("a");
+			enlaceEliminar.classList.add("linkContextMenu");
+			enlaceEliminar.innerHTML = "Eliminar todo";
+
+			enlaceEliminar.addEventListener("click", function(event){
+				var circulos = document.getElementsByClassName("circulo");
+				var numero = 5;
+				for(circulo in circulos){
+					circulos[circulo].innerHTML = numero;
+				}
+
+				var timer = setInterval(cuenta, 1000);
+				function cuenta(){
+					numero--;
+					for (circulo in circulos) {
+						circulos[circulo].innerHTML = numero;
+					}
+
+					if(numero <= 0){
+						clearInterval(timer);
+						while(document.getElementsByClassName("circulo").length > 0){
+							body.removeChild(body.lastElementChild);
+						}
+					}
+				}
+					
+
+				event.stopPropagation();
+				event.preventDefault();
+				enlaceEliminar.parentNode.style.display = "none";
+			});
+
+			enlaceGravedad = document.createElement("a");
+			enlaceGravedad.classList.add("linkContextMenu");
+			enlaceGravedad.innerHTML = "Gravedad a todo";
+
+			enlaceGravedad.addEventListener("click", function(event){
+
+
+				event.stopPropagation();
+				event.preventDefault();
+				enlaceGravedad.parentNode.style.display = "none";
+			});	
+
+			menu.appendChild(enlaceEliminar);
+			menu.appendChild(enlaceGravedad);		
+
+		}else{
+			enlaceEliminar = document.createElement("a");
+			enlaceEliminar.classList.add("linkContextMenu");
+			enlaceEliminar.innerHTML = "Eliminar Circulo";
+
+			enlaceEliminar.addEventListener("click", function(event){
+				if(newCirculo.innerHTML == ""){		//controlando error de doble click; si el circulo ya tiene contenido es porque ya se ejutó el evento  
+					document.getElementsByClassName("contextMenu")[0].style.display = "none";
+					var numero = 5;
+					newCirculo.innerHTML = numero;
+
+					var timer = setInterval(cuenta, 1000);
+					
+					function cuenta(){
+						numero--;
+						newCirculo.innerHTML = numero;
+						if(numero == 0){
+							clearInterval(timer);
+							newCirculo.parentNode.removeChild(newCirculo);
+						}
+					}
+				}
+
+				event.stopPropagation();
+				event.preventDefault();
+				enlaceEliminar.parentNode.style.display = "none";
+			});
+
+			enlaceGravedad = document.createElement("a");
+			enlaceGravedad.classList.add("linkContextMenu");
+			enlaceGravedad.innerHTML = "Aplicar Gravedad";
+			enlaceGravedad.addEventListener("click", function(event){
+				event.stopPropagation();
+				event.preventDefault();
+				enlaceGravedad.parentNode.style.display = "none";
+			});	
+
+			menu.appendChild(enlaceEliminar);
+			menu.appendChild(enlaceGravedad);
+		}
+	}
+
 
 	var colores = new Array("green", "blue", "red", "gray", "yellow", "black");
 
@@ -30,6 +133,8 @@ window.onload = function() {
 	}							//--------------------------------------
 
 	function clickBody(event){
+		document.getElementsByClassName("contextMenu")[0].style.display = "none";
+
 		var newCirculo = document.createElement("div");
 		newCirculo.classList.add("circulo");
 		var coordenadas = new calcularXY(event.pageX, event.pageY);
@@ -37,36 +142,21 @@ window.onload = function() {
 		newCirculo.style.backgroundColor = colores[aleatorio()];
 
 		function clickCirculo(e){
-			if(newCirculo.innerHTML == ""){		//controlando error de doble click; si el circulo ya tiene contenido es porque ya se ejutó el evento  
-				var numero = 5;
-				newCirculo.innerHTML = numero;
 
-				var timer = setInterval(cuenta, 1000);
-				
-				function cuenta(){
-					numero--;
-					newCirculo.innerHTML = numero;
-					if(numero == 0){
-						clearInterval(timer);
-						newCirculo.parentNode.removeChild(newCirculo);
-					}
-				}
-			}
-
-			e.stopPropagation();
-		}
-
-		
-		function rightClickCirculo(e){
 			var menu = document.getElementsByClassName("contextMenu")[0];
 			menu.style.display = "block";
 			menu.style.transform = "translate(" + e.pageX + "px, " + e.pageY + "px" + ")";
+			cambiarContextMenu(1, newCirculo);
+
 			e.stopPropagation();
-			e.preventDefault();
 		}
 
+
 		newCirculo.addEventListener("click", clickCirculo);
-		newCirculo.addEventListener("contextmenu", rightClickCirculo);
+		newCirculo.addEventListener("contextmenu", function(e){
+			e.preventDefault();
+			e.stopPropagation();
+		});
 
 		this.appendChild(newCirculo);
 	}
