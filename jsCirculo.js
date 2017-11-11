@@ -52,8 +52,8 @@ window.onload = function() {
 
 			enlaceGravedad.addEventListener("click", function(event){
 				var circulos = document.getElementsByClassName("circulo");
-				for(circulo in circulos){
-					circulos[circulo].classList.add("efectoGravedad");
+				for(var i = 0; i< circulos.length; i++){
+					circulos[i].classList.add("efectoGravedad");
 				}
 
 				event.stopPropagation();
