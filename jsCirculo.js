@@ -15,11 +15,10 @@ window.onload = function() {
 	function cambiarContextMenu(tipo = 0, newCirculo = new Object()){ //si el tipo es 0 = body, 1 = circulo
 		var menu = document.getElementsByClassName("contextMenu")[0];
 		menu.innerHTML = "";
-		var enlaceGravedad;
-		var enlaceEliminar;
+		var enlaceGravedad = document.createElement("a");
+		var enlaceEliminar = document.createElement("a");
+
 		if(tipo == 0){
-			enlaceEliminar = document.createElement("a");
-			enlaceEliminar.classList.add("linkContextMenu");
 			enlaceEliminar.innerHTML = "Eliminar todo";
 
 			enlaceEliminar.addEventListener("click", function(event){
@@ -44,30 +43,27 @@ window.onload = function() {
 					}
 				}
 					
-
 				event.stopPropagation();
 				event.preventDefault();
 				enlaceEliminar.parentNode.style.display = "none";
 			});
 
-			enlaceGravedad = document.createElement("a");
-			enlaceGravedad.classList.add("linkContextMenu");
 			enlaceGravedad.innerHTML = "Gravedad a todo";
 
 			enlaceGravedad.addEventListener("click", function(event){
-
+				var circulos = document.getElementsByClassName("circulo");
+				for(circulo in circulos){
+					circulos[circulo].classList.add("efectoGravedad");
+				}
 
 				event.stopPropagation();
 				event.preventDefault();
 				enlaceGravedad.parentNode.style.display = "none";
 			});	
-
-			menu.appendChild(enlaceEliminar);
-			menu.appendChild(enlaceGravedad);		
+		
 
 		}else{
-			enlaceEliminar = document.createElement("a");
-			enlaceEliminar.classList.add("linkContextMenu");
+
 			enlaceEliminar.innerHTML = "Eliminar Circulo";
 
 			enlaceEliminar.addEventListener("click", function(event){
@@ -93,9 +89,8 @@ window.onload = function() {
 				enlaceEliminar.parentNode.style.display = "none";
 			});
 
-			enlaceGravedad = document.createElement("a");
-			enlaceGravedad.classList.add("linkContextMenu");
 			enlaceGravedad.innerHTML = "Aplicar Gravedad";
+
 			enlaceGravedad.addEventListener("click", function(event){
 				if(newCirculo.style.bottom !== 0){
 					newCirculo.classList.add("efectoGravedad");
@@ -106,21 +101,19 @@ window.onload = function() {
 				enlaceGravedad.parentNode.style.display = "none";
 			});	
 
-			menu.appendChild(enlaceEliminar);
-			menu.appendChild(enlaceGravedad);
 		}
+
+		enlaceEliminar.classList.add("linkContextMenu");
+		enlaceGravedad.classList.add("linkContextMenu");
+		menu.appendChild(enlaceEliminar);
+		menu.appendChild(enlaceGravedad);
 	}
 
 
 	var colores = new Array("green", "blue", "red", "gray", "yellow", "black");
 
 	function aleatorio(){
-		var numero = Math.floor(Math.random()*10);
-		if(numero < colores.length){
-			return numero;
-		}else{
-			aleatorio();
-		}
+		return Math.floor(Math.random()*colores.length);
 	}
 
 
@@ -142,7 +135,11 @@ window.onload = function() {
 		var newCirculo = document.createElement("div");
 		newCirculo.classList.add("circulo");
 		var coordenadas = new calcularXY(event.pageX, event.pageY);
-		newCirculo.style.transform = "translate(" + coordenadas.coorX() + "px, " + coordenadas.coorY() + "px" + ")"; //desplazando nuevo circulo
+		
+		// newCirculo.style.transform = "translate(" + coordenadas.coorX() + "px, " + coordenadas.coorY() + "px" + ")"; //desplazando nuevo circulo
+		newCirculo.style.left = coordenadas.coorX() + "px";
+		newCirculo.style.top = coordenadas.coorY() + "px";
+
 		newCirculo.style.backgroundColor = colores[aleatorio()];
 
 		function clickCirculo(e){

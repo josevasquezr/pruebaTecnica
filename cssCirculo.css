@@ -3,8 +3,12 @@
 	margin: 0px;
 }
 
-html, body{
-	height: 100%;
+html{
+	height: 80%;
+}
+
+body{
+	height: 80vh;
 }
 
 .circulo{
@@ -48,14 +52,13 @@ html, body{
 }
 
 .efectoGravedad{
-	/*transform: translateY(100%);*/
-	/*bottom: 120px;
-	transition: all 2s ease;*/
 
-	animation: gravedad 1s ease 1;
+	animation: gravedad 0.5s ease-in 1 forwards;
 }
 
 @keyframes gravedad{
-	0%{ transform: translateY(0px); }
-	100%{ transform: translateY(100px); }
+	0%{ }
+	90%{top: calc(100% - 60px);}
+	95%{top: calc(100% - 100px);}
+	100%{ top: calc(100% - 60px); }
 }
