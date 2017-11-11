@@ -97,6 +97,10 @@ window.onload = function() {
 			enlaceGravedad.classList.add("linkContextMenu");
 			enlaceGravedad.innerHTML = "Aplicar Gravedad";
 			enlaceGravedad.addEventListener("click", function(event){
+				if(newCirculo.style.bottom !== 0){
+					newCirculo.classList.add("efectoGravedad");
+				}
+
 				event.stopPropagation();
 				event.preventDefault();
 				enlaceGravedad.parentNode.style.display = "none";
